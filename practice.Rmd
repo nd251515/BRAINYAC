@@ -1,0 +1,20 @@
+---
+title: "practice"
+author: "Naomi De Lashmutt"
+date: "7/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r}
+music_data<-read.csv("pilot_responses.csv")
+plot(x=music_data$memoryVivid, y=music_data$memoryValence, xlab="Vividness", ylab="Quality", main="My Plot", sub="Number One", col=3)
+
+
+
+
+```

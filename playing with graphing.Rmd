@@ -1,0 +1,84 @@
+---
+title: "first_graphs"
+author: "Naomi De Lashmutt"
+date: "7/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r}
+setwd("~/Desktop/BRAINYAC 2")
+music_data<-read.csv("pilot_responses.csv")
+library(ggplot2)
+```
+#exploratorygraph
+```{r}
+ggplot(data=music_data, aes(x=musicValence, y=memoryValence))+
+  theme_minimal()+
+  theme(panel.background=element_rect(fill="gray100"), axis.text=element_text(size=12), axis.title=element_text(size=20), plot.title=element_text(size=19, face="bold"))+
+  geom_point(color="lightseagreen")+
+  xlab("Music Evoked Emotion\nNegative-Positive")+
+  ylab("Memory Positivity\nNegative-Positive")+
+  xlim(1,7)+
+  ylim(1,7)+
+  stat_smooth(method=lm, color="orange2")+
+  facet_grid(~participantID)+
+  labs(title="Music Evoked Emotion vs Memory Positivity")
+```
+```{r}
+library(ggplot2)
+ggplot(data=music_data, aes(x=musicValence, y=memoryVivid))+
+  theme_minimal()+
+  theme(panel.background=element_rect(fill="gray100"), axis.text=element_text(size=12), axis.title=element_text(size=20), plot.title=element_text(size=20, face="bold"))+
+  geom_point(color="lightseagreen")+
+  xlab("Music Evoked Emotion\nNegative-Positive")+
+  ylab("Memory Vividness")+
+  xlim(1,7)+
+  ylim(1,7)+
+  stat_smooth(method=lm, color="orange2")+
+  facet_grid(~participantID)+
+  labs(title="Music Evoked Emotion vs Vividness")
+```
+```{r}
+ggplot(data=music_data, aes(x=memoryValence, y=memoryVivid))+
+  theme_minimal()+
+  theme(panel.background=element_rect(fill="gray100"), axis.text=element_text(size=12), axis.title=element_text(size=20), plot.title=element_text(size=20, face="bold"))+
+  geom_point(color="lightseagreen")+
+  xlab("Memory Positivity\nNegative-Positive")+
+  ylab("Memory Vividness")+
+  xlim(1,7)+
+  ylim(1,7)+
+  stat_smooth(method=lm, color="orange2")+
+  facet_grid(~participantID)+
+  labs(title="Memory Positivity vs Vividness")
+```
+#codeforstatisticalanalysis
+```{r}
+library(rstanarm)
+music_data
+regression_model1=rstanarm::stan_glmer(data=music_data, memoryValence~musicValence+(musicValence|participantID))
+```
+```{r}
+summary(regression_model1, probs=c(0.025, 0.9725), digits=4)
+```
+```{r}
+library(rstanarm)
+music_data
+regression_model2=rstanarm::stan_glmer(data=music_data, memoryVivid~musicValence+(musicValence|participantID))
+```
+```{r}
+summary(regression_model2, probs=c(0.025, 0.9725), digits=4)
+```
+
+```{r}
+library(rstanarm)
+music_data
+regression_model3=rstanarm::stan_glmer(data=music_data, memoryVivid~memoryValence+(musicValence|participantID))
+```
+```{r}
+summary(regression_model3, probs=c(0.025, 0.9725), digits=4)
+```
